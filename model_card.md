@@ -2,60 +2,31 @@
 
 ## 1. Model Name  
 
-Give your model a short, descriptive name.  
-Example: **VibeFinder 1.0**  
+**SonicVibe Recommender 1.0**  
 
 ---
 
 ## 2. Intended Use  
 
-Describe what your recommender is designed to do and who it is for. 
-
-Prompts:  
-
-- What kind of recommendations does it generate  
-- What assumptions does it make about the user  
-- Is this for real users or classroom exploration  
+The SonicVibe Recommender generates custom song playlists based on a user's current mood and exact audio preferences. It assumes the user knows the specific vibe they want to hear, down to the energy and tempo. This model is built for classroom exploration and testing to understand recommendation algorithms. It is not designed for live production use or to replace commercial streaming apps. Instead, it acts as a safe sandbox for developers to observe how small math changes impact listener experiences.
 
 ---
 
 ## 3. How the Model Works  
 
-Explain your scoring approach in simple language.  
-
-Prompts:  
-
-- What features of each song are used (genre, energy, mood, etc.)  
-- What user preferences are considered  
-- How does the model turn those into a score  
-- What changes did you make from the starter logic  
-
-Avoid code here. Pretend you are explaining the idea to a friend who does not program.
+The model looks at text tags like genre and mood, alongside musical numbers like energy, tempo, and acousticness. It compares these song features to a user's ideal target numbers. The system calculates the mathematical gap between what the user wants and what the song actually sounds like. Smaller gaps earn higher percentage match scores. During testing, we changed the starter logic to give more weight to the actual musical traits. This ensures a song with the perfect sonic math can beat a song that simply matches the genre text. Specifically, it uses an additive point system to total these matches up. Finally, it sorts the catalog from highest to lowest score to present the user with their Top 5 playlist.
 
 ---
 
 ## 4. Data  
 
-Describe the dataset the model uses.  
-
-Prompts:  
-
-- How many songs are in the catalog  
-- What genres or moods are represented  
-- Did you add or remove data  
-- Are there parts of musical taste missing in the dataset  
+The dataset is a custom catalog containing 17 songs. It covers a wide range of genres, including pop, lofi, rock, metal, classical, and hip-hop. We added 7 new songs to the original starter file to test extreme moods like "aggressive," "epic," and "carefree." Because it is a miniature dataset, it completely misses major aspects of real-world musical taste, such as release year, vocal style, popularity, and lyrical themes.
 
 ---
 
 ## 5. Strengths  
 
-Where does your system seem to work well  
-
-Prompts:  
-
-- User types for which it gives reasonable results  
-- Any patterns you think your scoring captures correctly  
-- Cases where the recommendations matched your intuition  
+The system works incredibly well for users with focused, highly aligned requests, such as finding a high-energy pop track for the gym. It accurately captures the physical feel of a song by heavily weighting traits like energy and valence. The recommendations match human intuition best when the user's requested genre naturally matches their requested audio numbers. Another major strength is its complete transparency. Because the algorithm outputs a specific list of "reasons" for every score, users always understand exactly why a track was recommended to them.
 
 ---
 
@@ -76,23 +47,10 @@ One significant limitation of the current system is its vulnerability to an "exa
 
 ## 8. Future Work  
 
-Ideas for how you would improve the model next.  
-
-Prompts:  
-
-- Additional features or preferences  
-- Better ways to explain recommendations  
-- Improving diversity among the top results  
-- Handling more complex user tastes  
+To improve the model, the first step is adding an Artist Diversity Filter to prevent the system from recommending five songs by the same person in a row. I also want to fix the rigid text-matching so a request for "pop" can still recognize and reward an "indie pop" track. Finally, future versions should include a slight randomness factor to slowly introduce new, out-of-bounds genres to the user to encourage musical discovery.
 
 ---
 
 ## 9. Personal Reflection  
 
-A few sentences about your experience.  
-
-Prompts:  
-
-- What you learned about recommender systems  
-- Something unexpected or interesting you discovered  
-- How this changed the way you think about music recommendation apps  
+I learned that text labels like genre can easily overpower actual audio data if the math is not balanced carefully. It was surprising to see how an algorithm can do exactly what it is programmed to do, yet still deliver a bad user experience. For example, our early model recommended an aggressive metal track to a user wanting happy music simply because the genre tag matched. This project completely changed the way I think about big music streaming apps. It made me realize how much hidden logic they must use to break listeners out of filter bubbles and echo chambers.
