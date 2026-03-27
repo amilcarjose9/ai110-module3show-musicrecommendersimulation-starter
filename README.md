@@ -41,7 +41,17 @@ For each song, calculate a total score starting at 0:
 
 ### CLI Verification
 
-![Alt text for the image](terminal-output-screenshot.png)
+![Terminal output screenshot](terminal-output-screenshot.png)
+
+### Stress Test with Diverse Profiles
+
+![Gym banger profile result](gym-banger.png)
+
+![Acoustic pourist profile result](acoustic-pourist.png)
+
+![Speedcore lofi profile resu;t](speedcore-lofi.png)
+
+![Happy goth profile result](happy-goth.png)
 
 ## Getting Started
 

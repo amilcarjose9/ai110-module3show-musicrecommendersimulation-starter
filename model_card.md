@@ -61,29 +61,16 @@ Prompts:
 
 ## 6. Limitations and Bias 
 
-Where the system struggles or behaves unfairly. 
-
-Prompts:  
-
-- Features it does not consider  
-- Genres or moods that are underrepresented  
-- Cases where the system overfits to one preference  
-- Ways the scoring might unintentionally favor some users  
+One significant limitation of the current system is its vulnerability to an "exact-match string trap," which inherently creates a rigid filter bubble. Because the algorithm relies on strict text matching for categorical tags, it completely ignores highly related styles, such as awarding zero genre points to an "indie pop" track when a user explicitly requests "pop." Furthermore, because the scoring logic evaluates each song in a vacuum without enforcing playlist variety, the system easily overfits and creates an artist echo chamber if one musician's catalog perfectly aligns with the target audio traits. Ultimately, this strict, uncontextualized scoring unintentionally favors users with mainstream, easily categorized tastes while heavily penalizing listeners who prefer nuanced subgenres.
 
 ---
 
 ## 7. Evaluation  
 
-How you checked whether the recommender behaved as expected. 
-
-Prompts:  
-
-- Which user profiles you tested  
-- What you looked for in the recommendations  
-- What surprised you  
-- Any simple tests or comparisons you ran  
-
-No need for numeric metrics unless you created some.
+* **Profiles Tested:** We evaluated the engine using a custom CLI test runner (`src/main.py`) against "Golden Path" profiles (e.g., *The Gym Banger*) to verify standard behavior, and "Adversarial" edge cases (e.g., *The Happy Goth*, *Speedcore Lofi*) to stress-test the limits of the scoring logic.
+* **Testing Focus:** The primary goal was to observe how the algorithm resolved conflicts between categorical text tags (Genre/Mood) and continuous mathematical audio features (Energy, Valence, Tempo) when generating the top 5 recommendations.
+* **Surprising Findings:** The adversarial tests revealed a severe "Tag Tyranny" vulnerability. For instance, in *The Happy Goth* test, the system initially recommended an aggressive metal track with entirely mismatched audio features over a pop track with mathematically perfect audio traits. The flat +3.0 point bonus for matching text tags was acting as an insurmountable wall against the actual sonic math. 
+* **Resolution:** This discovery forced a structural update to the scoring recipe, requiring us to nerf the categorical bonuses (+1.5 for Genre) and buff the emotional multipliers (Valence x1.5) to ensure a perfectly matched audio profile could outcompete rigid text labels.
 
 ---
 

@@ -89,12 +89,12 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
 
     # 1. Categorical Bonuses
     if song.get('genre') == user_prefs.get('favorite_genre'):
-        score += 2.0
-        reasons.append("Genre match (+2.00)")
+        score += 1.5
+        reasons.append("Genre match (+1.50)")
         
     if song.get('mood') == user_prefs.get('favorite_mood'):
-        score += 1.0
-        reasons.append("Mood match (+1.00)")
+        score += 0.5
+        reasons.append("Mood match (+0.50)")
 
     # 2. Continuous Proximity Scores
     
@@ -105,10 +105,10 @@ def score_song(user_prefs: Dict, song: Dict) -> Tuple[float, List[str]]:
         score += energy_pts
         reasons.append(f"Energy match (+{energy_pts:.2f})")
 
-    # Valence (Weight: x1.0)
+    # Valence (Weight: x1.5 - BUFFED to prioritize emotional match)
     if 'target_valence' in user_prefs and 'valence' in song:
         valence_diff = abs(user_prefs['target_valence'] - song['valence'])
-        valence_pts = (1.0 - valence_diff) * 1.0
+        valence_pts = (1.0 - valence_diff) * 1.5
         score += valence_pts
         reasons.append(f"Valence match (+{valence_pts:.2f})")
 

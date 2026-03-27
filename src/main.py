@@ -1,55 +1,79 @@
 """
 Command line runner for the Music Recommender Simulation.
 
-This file helps you quickly run and test your recommender.
-
-You will implement the functions in recommender.py:
-- load_songs
-- score_song
-- recommend_songs
+This file helps you test your recommender against multiple 
+golden path and adversarial user profiles.
 """
 
 from recommender import load_songs, recommend_songs
-
 
 def main() -> None:
     # 1. Load the catalog
     songs = load_songs("data/songs.csv") 
 
-    # 2. Define the target user profile
-    user_prefs = {
-        "favorite_genre": "pop", 
-        "favorite_mood": "happy", 
-        "target_energy": 0.80,
-        "target_valence": 0.85,
-        "target_tempo_bpm": 120
+    # 2. Define the test profiles
+    test_profiles = {
+        "The Gym Banger (Golden Path)": {
+            "favorite_genre": "pop",
+            "favorite_mood": "intense",
+            "target_energy": 0.95,
+            "target_valence": 0.75,
+            "target_danceability": 0.90,
+            "target_acousticness": 0.05,
+            "target_tempo_bpm": 135
+        },
+        "The Acoustic Purist (Golden Path)": {
+            "favorite_genre": "folk",
+            "favorite_mood": "melancholy",
+            "target_energy": 0.20,
+            "target_valence": 0.15,
+            "target_danceability": 0.30,
+            "target_acousticness": 0.95,
+            "target_tempo_bpm": 65
+        },
+        "Speedcore Lofi (Adversarial)": {
+            "favorite_genre": "lofi",
+            "favorite_mood": "chill",
+            "target_energy": 0.99,
+            "target_valence": 0.10,
+            "target_danceability": 0.20,
+            "target_acousticness": 0.00,
+            "target_tempo_bpm": 160
+        },
+        "The Happy Goth (Adversarial)": {
+            "favorite_genre": "metal",
+            "favorite_mood": "aggressive",
+            "target_energy": 0.85,
+            "target_valence": 0.95,
+            "target_danceability": 0.88,
+            "target_acousticness": 0.70,
+            "target_tempo_bpm": 110
+        }
     }
 
-    # 3. Generate recommendations
-    recommendations = recommend_songs(user_prefs, songs, k=5)
+    # 3. Loop through and test each profile
+    for profile_name, prefs in test_profiles.items():
+        print("\n" + "=" * 60)
+        print(f" 🎧 TESTING PROFILE: {profile_name.upper()} 🎧")
+        print("=" * 60)
 
-    # 4. Format and display the output
-    print("\n" + "=" * 55)
-    print(" 🎧 YOUR CUSTOM PLAYLIST RECOMMENDATIONS 🎧")
-    print("=" * 55)
+        recommendations = recommend_songs(prefs, songs, k=5)
 
-    for rank, rec in enumerate(recommendations, start=1):
-        song, score, explanation = rec
-        
-        # Display Title, Artist, and Score
-        print(f"\n[{rank}] {song['title']} by {song['artist']}")
-        print(f"    Match Score: {score:.2f} pts")
-        print("    Why it matched:")
-        
-        # Split the explanation string into clean bullet points
-        if explanation == "No specific matches found.":
-            print(f"      - {explanation}")
-        else:
-            reasons = explanation.split(", ")
-            for reason in reasons:
-                print(f"      ✓ {reason}")
+        for rank, rec in enumerate(recommendations, start=1):
+            song, score, explanation = rec
             
-    print("\n" + "=" * 55 + "\n")
+            print(f"\n[{rank}] {song['title']} by {song['artist']}")
+            print(f"    Match Score: {score:.2f} pts")
+            print("    Why it matched:")
+            
+            if explanation == "No specific matches found.":
+                print(f"      - {explanation}")
+            else:
+                reasons = explanation.split(", ")
+                for reason in reasons:
+                    print(f"      ✓ {reason}")
+
+    print("\n" + "=" * 60 + "\n")
 
 
 if __name__ == "__main__":
