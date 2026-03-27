@@ -25,6 +25,20 @@ When it is time to compute a score for each track, the recommender calculates th
 
 Finally, to choose which songs to actually present, the system first eliminates any tracks that violate the user's active filters, sorts the remaining candidates from the highest match score to the lowest, and applies a final ranking logic to ensure the top results offer a diverse mix of artists for an enjoyable playlist.
 
+### Recommender System Architecture Plan
+
+**Algorithm Recipe (Scoring Logic)**
+For each song, calculate a total score starting at 0:
+* **Genre Match:** +2.0 points for an exact match.
+* **Mood Match:** +1.0 point for an exact match.
+* **Audio Trait Match:** For Energy, Valence, Danceability, Acousticness, and normalized Tempo, calculate proximity: `(1.0 - |Target - Actual|)`.
+* **Feature Weights:** Multiply the Energy proximity score by 1.5, Acousticness by 0.5, and the rest by 1.0. 
+* **Ranking:** Sum all points to get the final score, then sort the catalog from highest to lowest.
+
+**Potential Biases & Blind Spots**
+* By heavily weighting the text tag (+2.0 for genre), the system will likely bury songs with a perfect mathematical audio vibe simply because they belong to a different category.
+* Since the scoring is strictly content-based, it risks recommending a monotonous block of identical-sounding tracks by the same artist, ignoring the user's need for novelty or variety.
+
 ## Getting Started
 
 ### Setup
